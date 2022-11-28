@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 using namespace std;
 
 enum class Type {I, O, T, J, L, S, Z};
@@ -112,7 +111,7 @@ private:
 	void transpose();// transposing matrix
 	void mirror(); // mirroring matrix
 public:
-	vectorecpe<char> blockPrint;
+	vectorecpe <vectorecpe <char> > blockPrint;
 	Tetromino(Type);// this is a constructor
 	Tetromino();// this is a constructor too
 	void print();// this is print func
@@ -215,16 +214,15 @@ void Tetromino::transpose()
 	this->blockPrint= oc;
 }
 
-template <typename Object>
-void Tetromino<Object>::mirror()
+void Tetromino::mirror()
 {
-	vector <vector <char>> oc(this->blockPrint.size(), vector <char> (this->blockPrint[0].size()));
+	vectorecpe <vectorecpe <char> > oc(vectorecpe <char> (this->blockPrint[0].getSize()), this->blockPrint.getSize() );
 
-	for(int row = 0; row < this->blockPrint.size(); row++)
+	for(int row = 0; row < this->blockPrint.getSize(); row++)
 	{
-		for(int column = 0; column < this->blockPrint[0].size(); column++)
+		for(int column = 0; column < this->blockPrint[0].getSize(); column++)
 		{
-			oc[row][column]= this->blockPrint[row][this->blockPrint[0].size() - column -1];// mirroring the matrix
+			oc[row][column]= this->blockPrint[row][this->blockPrint[0].getSize() - column - 1];// mirroring the matrix
 		}
 	}
 
@@ -236,7 +234,7 @@ void Tetromino::print()
 {
 	for (int i = 0; i < blockPrint.getSize(); i++)
 	{
-		for (int j = 0; j < blockPrint[i].size(); j++)
+		for (int j = 0; j < blockPrint[i].getSize(); j++)
 		{
 			cout << blockPrint[i][j];
 		}
