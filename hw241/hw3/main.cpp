@@ -17,6 +17,7 @@ public:
 	vectorecpe();
 	vectorecpe(size_t n);
 	vectorecpe(const Object& a,size_t n);
+	vectorecpe(const vectorecpe &origin);
 
 	~vectorecpe();
 	const Object & operator[](size_t index ) const {return objects[ index ];}
@@ -53,6 +54,16 @@ vectorecpe<Object>::vectorecpe(const Object& a, size_t n)
 		objects[i] = a;
 	}
 
+}
+
+template<typename Object>
+vectorecpe<Object>::vectorecpe(const vectorecpe &origin)
+{
+    size = origin.vector_size;
+    capacity = origin.reserved_size;
+    objects = new T[reserved_size];
+    for (size_t i = 0; i < size; i++)
+        storage[i] = origin.storage[i];
 }
 
 template <typename Object>
@@ -101,7 +112,6 @@ void	vectorecpe<Object>::reallocate()
 	move_arr(new_arr, objects, size);
 	delete objects [];
 	objects = new_arr;
-
 }
 
 class Tetromino
