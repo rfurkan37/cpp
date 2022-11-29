@@ -74,7 +74,7 @@ template <typename Object>
 vectorecpe<Object>::~vectorecpe()
 {
 		cout << "desktruk" << endl;
-       // delete[] objects;
+        	delete objects;
 }
 
 template <typename Object>
