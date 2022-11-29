@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 enum class Type {I, O, T, J, L, S, Z};
@@ -23,6 +25,8 @@ public:
 	const Object & operator[](size_t index ) const {return objects[ index ];}
 	Object & operator[](size_t index){return objects[index];}
 	void push_back(const Object& x);
+	Object& back(){return objects[size - 1];}
+
 	int getSize() {return size;}
     
 };
@@ -59,18 +63,18 @@ vectorecpe<Object>::vectorecpe(const Object& a, size_t n)
 template<typename Object>
 vectorecpe<Object>::vectorecpe(const vectorecpe &origin)
 {
-    size = origin.vector_size;
-    capacity = origin.reserved_size;
-    objects = new T[reserved_size];
+    size = origin.size;
+    capacity = origin.size;
+    objects = new Object[capacity];
     for (size_t i = 0; i < size; i++)
-        storage[i] = origin.storage[i];
+        objects[i] = origin.objects[i];
 }
 
 template <typename Object>
 vectorecpe<Object>::~vectorecpe()
 {
-	 if (objects != nullptr)
-        delete[] objects;
+		cout << "desktruk" << endl;
+       // delete[] objects;
 }
 
 template <typename Object>
@@ -78,7 +82,7 @@ void	vectorecpe<Object>::push_back(const Object& x)
 {
 	if(size == capacity)
 	{
-		capacity += capacity / 2 + 1;
+		capacity += (capacity / 2) + 1;
 		reallocate();
 	}
 	objects[size++] = x;
@@ -110,7 +114,7 @@ void	vectorecpe<Object>::reallocate()
 	Object* new_arr = new Object[capacity];
 
 	move_arr(new_arr, objects, size);
-	delete objects [];
+	delete [] objects;
 	objects = new_arr;
 }
 
@@ -142,52 +146,81 @@ Tetromino::Tetromino(Type tip) // bu constructor
 	switch (tip)
 	{
 	case Type::I :
-		blockPrint
+		for (size_t i = 0; i < 4; i++)
+		{
+		blockPrint.push_back(vectorecpe <char> (1));
+		blockPrint[i].push_back('I');
+		}
+		
 		break;
 	case Type:: O :
-		blockPrint = 
+		for (size_t i = 0; i < 2; i++)
 		{
-			{'O','O'},
-			{'O','O'},
-		};
+		blockPrint.push_back(vectorecpe <char> (2));
+		blockPrint[i].push_back('O');
+		blockPrint[i].push_back('O');
+		}
 		break;
 	case Type::T :
-		blockPrint =
-		{
-			{'T',' '},
-			{'T','T'},
-			{'T',' '}
-		};
+		for (size_t i = 0; i < 3; i++)
+			blockPrint.push_back(vectorecpe <char> (2));
+		
+		blockPrint[0].push_back('T');
+		blockPrint[0].push_back(' ');
+		blockPrint[1].push_back('T');
+		blockPrint[1].push_back('T');
+		blockPrint[2].push_back('T');
+		blockPrint[2].push_back(' ');
+
 		break;
 	case Type::J :
-		blockPrint =
-		{
-			{' ','J'},
-			{' ','J'},
-			{'J','J'}
-		};
+		for (size_t i = 0; i < 3; i++)
+			blockPrint.push_back(vectorecpe <char> (2));
+		
+		blockPrint[0].push_back(' ');
+		blockPrint[0].push_back('J');
+		blockPrint[1].push_back(' ');
+		blockPrint[1].push_back('J');
+		blockPrint[2].push_back('J');
+		blockPrint[2].push_back('J');
+
 		break;
 	case Type::L :
-		blockPrint =
-		{
-			{'L',' '},
-			{'L',' '},
-			{'L','L'}
-		};
+
+		for (size_t i = 0; i < 3; i++)
+			blockPrint.push_back(vectorecpe <char> (2));
+		
+		blockPrint[0].push_back('L');
+		blockPrint[0].push_back(' ');
+		blockPrint[1].push_back('L');
+		blockPrint[1].push_back(' ');
+		blockPrint[2].push_back('L');
+		blockPrint[2].push_back('L');
+
 		break;
 	case Type::S :
-		blockPrint =
-		{
-			{' ','S','S'},
-			{'S','S',' '}
-		};
+		
+		for (size_t i = 0; i < 2; i++)
+			blockPrint.push_back(vectorecpe <char> (3));
+		
+		blockPrint[0].push_back(' ');
+		blockPrint[0].push_back('S');
+		blockPrint[0].push_back('S');
+		blockPrint[1].push_back('S');
+		blockPrint[1].push_back('S');
+		blockPrint[1].push_back(' ');
+
 		break;
 	case Type::Z :
-		blockPrint =
-		{
-			{'Z','Z',' '},
-			{' ','Z','Z'}
-		};
+		for (size_t i = 0; i < 2; i++)
+			blockPrint.push_back(vectorecpe <char> (3));
+		
+		blockPrint[0].push_back('Z');
+		blockPrint[0].push_back('Z');
+		blockPrint[0].push_back(' ');
+		blockPrint[1].push_back(' ');
+		blockPrint[1].push_back('Z');
+		blockPrint[1].push_back('Z');
 		break;
 	default:
 		break;
@@ -252,21 +285,112 @@ void Tetromino::print()
 	}
 }
 
+
 class Tetris
 {
+private:
+	int row, column;
 public:
-    Tetris(const int& row, const int& column);
-    void Draw();
-    void Animate();
-    Tetris& operator+=(const Tetromino& Tetro);
+	Tetris(string);
+	Tetris(const int& row, const int& column);
+	void Draw();
+	void Animate();
+	vectorecpe <vectorecpe <char>> table;
+	int getRow() { return row; }
+	int getColumn() { return column; }
+	Tetris& operator+=(const Tetromino& Tetro);
 };
 
 Tetris::Tetris(const int& row, const int& column)
 {
 }
 
+Tetris::Tetris(const string input)
+{
+	int placeOfX;
+	vectorecpe <char> rov;
+	cout << "rov yapildi" << endl;
+
+	placeOfX = input.find('x');
+	row = atoi(input.substr(0, placeOfX).c_str());
+	column = atoi(input.substr(placeOfX + 1, input.length() - placeOfX).c_str());
+	while (column-- > 0) // creating table
+		rov.push_back(' ');
+
+	while (row-- > 0)
+		table.push_back(rov); // creating table
+
+	cout << "konstraktir biti";
+}
+
 int main()
 {
+	int row, column,wrongFlag = 0;
+	char buffer;
+	string line;
+	srand(time(NULL));
+	vectorecpe<Tetromino> tetroVector; // legend came back
+	cout << "Welcome to the Tetris animation" << endl;
+	cout << "\nPlease enter the size of Tetris table(RxC):";
+	getline(cin, line);
+	Tetris gameTable(line);
+	cout << "From now on select one block from {I,O,T,J,S,Z,L} or R for random and Q for quit." << endl;
+	while (true)
+	{
+		cout << "\n" << "\033[A"; 
+		cin >> buffer;
+
+		if (buffer == 'Q' || buffer == 'q')
+			break;
+
+		switch (buffer)
+		{
+		case 'R':
+		case 'r':
+			tetroVector.push_back(Tetromino(static_cast<Type>(rand() % 8)));
+			break;
+		case 'I':
+		case 'i':
+			tetroVector.push_back(Tetromino(Type ::I));
+			break;
+		case 'O':
+		case 'o':
+			tetroVector.push_back(Tetromino(Type ::O));
+			break;
+		case 'T':
+		case 't':
+			tetroVector.push_back(Tetromino(Type ::T));
+			break;
+		case 'J':
+		case 'j':
+			tetroVector.push_back(Tetromino(Type ::J));
+			break;
+		case 'L':
+		case 'l':
+			tetroVector.push_back(Tetromino(Type ::L));
+			break;
+		case 'S':
+		case 's':
+			tetroVector.push_back(Tetromino(Type ::S));
+			break;
+		case 'Z':
+		case 'z':
+			tetroVector.push_back(Tetromino(Type ::Z));
+			break;
+		default:
+			cerr << "Wrong input try again !!" << endl;
+			wrongFlag = 1;
+			break;
+		}
+
+		tetroVector.back().print();
+		cout << endl;
+	}
+	cout << "Game Over" << endl;
+
+	return 0;
+
+
 
 
 
