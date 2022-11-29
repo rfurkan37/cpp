@@ -73,8 +73,8 @@ vectorecpe<Object>::vectorecpe(const vectorecpe &origin)
 template <typename Object>
 vectorecpe<Object>::~vectorecpe()
 {
-		cout << "desktruk" << endl;
-        	delete objects;
+		for(int i = 0; i < size; i++)
+        	objects[i].~Object();
 }
 
 template <typename Object>
