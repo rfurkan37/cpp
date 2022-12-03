@@ -73,7 +73,7 @@ int main()
 		}
 
 		gameTable += tetroVector.back();
-		gameTable.Draw();
+		gameTable.Animate();
 		
 
 

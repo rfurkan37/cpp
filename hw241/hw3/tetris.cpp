@@ -3,6 +3,8 @@
 
 using std::endl;
 using std::cout;
+using std::cin;
+
 
 
 Tetris::Tetris(const int& row, const int& column)
@@ -68,4 +70,36 @@ Tetris& Tetris::operator+=(const Tetromino& Tetro)
 	return *this;
 }
 
+void Tetris::Erase(int si, int sj)
+{
+
+}
+
+void Tetris::Animate()
+{
+	char rotation_direction, move_direction;
+	int rotation_count,  move_count;
+	int si = 0, sj = table[0].getSize() / 2;
+	/* erase add döngüsü
+	draw
+	ask rotation direction and count
+	ask move direction and count
+	rotate and move
+	draw
+	sleep 50 miliseconds
+	lower tetromino one level and draw sleep down
+
+	*/
+	Draw();
+	cout << "Please enter rotation direction('L' || 'R'): ";
+	cin >> rotation_direction;
+	cout << "Please enter rotation count: ";
+	cin >> rotation_count;
+
+	cout << "Please enter move direction: ";
+    cin >> move_direction;
+	cout << "Please enter move count: ";
+    cin >> move_count;
+
+}
 

@@ -13,6 +13,7 @@ public:
 	void Draw();
 	void Animate();
 	void Add(Tetromino sekil, int si, int sj);
+	void Erase(int si, int sj);
 
 	vectorecpe <vectorecpe <char>> table;
 	int getRow() { return row; }
