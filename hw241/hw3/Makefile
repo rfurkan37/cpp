@@ -1,20 +1,18 @@
-all: clear compile run clean
+all: clear compile_run1 compile_run2 clean 
 
 clear:
 	@clear
 
-compile:
-	@g++ -c tetromino.cpp
-	@g++ -c tetris.cpp
-	@g++ -c main.cpp
-	@g++ main.o tetromino.o tetris.o
-
-run:
+compile_run1:
+	@g++ driver1.cpp tetromino.cpp tetris.cpp
 	@./a.out
+	@echo "DRIVER 2 BEGINS"
+
+
+compile_run2:
+	@g++ driver2.cpp tetromino.cpp tetris.cpp
+	@./a.out
+
 
 clean:
 	@rm -rf a.out
-	@rm -rf main.o
-	@rm -rf tetromino.o
-	@rm -rf tetris.o
-

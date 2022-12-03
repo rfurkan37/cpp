@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-template <typename Object>
+template <typename Object> // implementation of my custom vector class
 class vectorecpe
 {
 private:
@@ -32,38 +32,38 @@ public:
 	int getSize() {return size;}
 };
 
-template <typename Object> void vectorecpe<Object>::copy(const vectorecpe<Object>& v)
+template <typename Object> void vectorecpe<Object>::copy(const vectorecpe<Object>& v) // copying function used in operator =
 {
 	size = v.size;
 	capacity = v.capacity;
-    objects = new Object[capacity];
+    objects = new Object[capacity]; // making capacities equal
 
 	for (size_t i = 0; i < size; i++)
     {
-		objects[i] = v.objects[i];
+		objects[i] = v.objects[i]; // taking obhjects one by one
 	}
 }
 
 template <typename Object> vectorecpe<Object>::vectorecpe()
 {
-	objects = new Object[capacity];
+	objects = new Object[capacity]; // allocating new memory
 }
 
 template <typename Object> vectorecpe<Object>::vectorecpe(size_t n)
 {
 	size = n;
 	capacity = n + n / 2 + 1;
-	objects = new Object[capacity];
+	objects = new Object[capacity]; // allocating memory for choosen size and capacity
 
 }
 
-template <typename Object> vectorecpe<Object>::vectorecpe(const Object& a, size_t n)
+template <typename Object> vectorecpe<Object>::vectorecpe(const Object& a, size_t n) // constructor with object need to fill
 {
 	size = n;
 	capacity = n + n / 2 + 1;
 	objects = new Object[capacity];
 
-	for(size_t i = 0; i < n; i++)
+	for(size_t i = 0; i < n; i++) 
 	{
 		objects[i] = a;
 	}
@@ -75,13 +75,13 @@ template <typename Object> inline vectorecpe<Object>::vectorecpe(const vectorecp
     size = origin.size;
     capacity = origin.size;
     objects = new Object[capacity];
-    for (size_t i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++) // zopy constructor
         objects[i] = origin.objects[i];
 }
 
 template <typename Object> vectorecpe<Object>::~vectorecpe()
 {
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < size; i++) // destructor destructs every object in the vector
 		{
         	objects[i].~Object();
 		}
@@ -89,49 +89,52 @@ template <typename Object> vectorecpe<Object>::~vectorecpe()
 
 template <typename Object> inline vectorecpe<Object>& vectorecpe<Object>::operator=(const vectorecpe<Object>& v)
 {
-	if (this != &v) {
-		delete [] objects;
-		this->copy(v); 
+	if (this != &v) { // if they are not equal 
+		delete [] objects;  // delete allocated memory
+		this->copy(v);  // copying v to this 
 	}
-		return *this;
+		return *this; // returning this
 }
 
 template <typename Object> void	vectorecpe<Object>::push_back(const Object& x)
 {
-	if(size == capacity)
+	if(size == capacity) // if size gets full
 	{
-		capacity += (capacity / 2) + 1;
-		reallocate();
+		capacity += (capacity / 2) + 1; // incrementing capacity
+		reallocate(); // reallocating capacity
 	}
-	objects[size++] = x;
+	objects[size++] = x; // pushing at back
 }
 
 template <typename Object> void	vectorecpe<Object>::move_arr(Object* dest, Object* src, size_t n)
 {
-	if (dest < src)
+	if (dest < src) //if dest is less than src, in which case the elements are moved in increasing order
+	
     {
         Object *_dest = dest, *_src = src;
         for (size_t i = 0; i < n; i++)
             *_dest++ = std::move(*_src++);
     }
-    else if (dest > src)
+	
+	if (dest > src) //if dest is greater than src in which case the elements are moved in decreasing order.
     {
         Object *_dest = dest + n - 1, *_src = src + n - 1;
         for (size_t i = n; i > 0; i--)
             *_dest-- = std::move(*_src--);
     }
-    else
+	else // if dest and src are the same array then returns
         return;
+    
 
 }
 
 template <typename Object> void	vectorecpe<Object>::reallocate()
 {
-	Object* new_arr = new Object[capacity];
+	Object* new_arr = new Object[capacity]; // allocating new memory
 
-	move_arr(new_arr, objects, size);
-	delete [] objects;
-	objects = new_arr;
+	move_arr(new_arr, objects, size); // moving array
+	delete [] objects; // deleting old
+	objects = new_arr; // initializing new memory
 }
 
 

@@ -8,8 +8,6 @@ using std::cin;
 using std::endl;
 using std::cerr;
 
-//using namespace custom;
-
 
 int main()
 {
@@ -17,7 +15,7 @@ int main()
 	char buffer;
 	char* line = new char[100];
 	srand(time(NULL));
-	vectorecpe<Tetromino> tetroVector; // legend came back
+	vectorecpe<Tetromino> tetroVector;
 	cout << "Welcome to the Tetris animation" << endl;
 	cout << "\nPlease enter the size of Tetris table row:";
 	cin >> row;
@@ -72,16 +70,8 @@ int main()
 			break;
 		}
 
-		gameTable += tetroVector.back();
-		//gameTable.Draw();
-		gameTable.Animate(tetroVector.back());
-		
-
-
-
-		
-
-
+		gameTable += tetroVector.back(); // operator+= is calling add function
+		gameTable.Animate(tetroVector.back()); // aniamte function takes care of everything
 		cout << endl;
 	}
 	cout << "Game Over" << endl;

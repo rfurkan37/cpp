@@ -8,7 +8,6 @@ using std::cout;
 using std::cin;
 
 
-
 Tetris::Tetris(const int& row, const int& column)
 {
 	vectorecpe <char> rov;
@@ -67,14 +66,14 @@ void Tetris::Draw(void)
 
 Tetris& Tetris::operator+=(const Tetromino& Tetro)
 {
-	this->Add(Tetro, 0, table[0].getSize() / 2);
+	this->Add(Tetro, 0, table[0].getSize() / 2); // middle of the top arr
 
 	return *this;
 }
 
 void Tetris::Erase(int si, int sj, Tetromino sekil)
 {
-	int artirmasay = 0;
+	int artirmasay = 0; // erasing the last drawed shape
 
 	for (size_t i = 0; i < sekil.blockPrint.getSize(); i++)
 	{
@@ -107,7 +106,7 @@ void Tetris::Animate(Tetromino shape)
 	cin >> rotation_count;
 
 	while(rotation_count-- > 0)
-		shape.rotate(rotation_direction);
+		shape.rotate(rotation_direction); // rotating
 
 
 	shape_size = shape.blockPrint[0].getSize();
@@ -116,7 +115,7 @@ void Tetris::Animate(Tetromino shape)
 	while(1)
 	{
 	cout << "Please enter move direction: ";
-    cin >> move_direction;
+    cin >> move_direction;// taking the inputs
 
 	cout << "Please enter move count: ";
     cin >> move_count;
@@ -124,7 +123,7 @@ void Tetris::Animate(Tetromino shape)
 	if(move_direction == 'L')
 	{
 		if(sj - move_count < 0)
-			cout << "Out of borders try again!!" << endl; 
+			cout << "Out of borders try again!!" << endl; // looking at borders
 		else
 		{
 
@@ -135,7 +134,7 @@ void Tetris::Animate(Tetromino shape)
 	else if(move_direction == 'R')
 	{
 		if(sj + move_count + shape_size > table_size)
-			cout << "Out of borders try again!!" << endl;
+			cout << "Out of borders try again!!" << endl; // borders
 		else
 		{
 			sj += move_count;
@@ -144,15 +143,13 @@ void Tetris::Animate(Tetromino shape)
 	}
 	}
 
-	cout << shape_verticalsize << endl;
-	cout << shape_size << endl;
-	while(si +  shape_verticalsize - 1 < table_verticalsize && table[si + shape_verticalsize - 1][sj] == ' ' && shape.blockPrint[shape_verticalsize - 1][0] != ' ' && table[si + shape_verticalsize - 1][sj + 1] == ' ')
+	while(si +  shape_verticalsize - 1 < table_verticalsize && table[si + shape_verticalsize - 1][sj] == ' ') // checking the bottom and the whitespace
 	{
 		Add(shape, si, sj);
 		Draw();
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		std::this_thread::sleep_for(std::chrono::milliseconds(50)); // sleep func
 		Erase(si, sj, shape);
-		cout << "\033[" << table.getSize() + 1 << "A";
+		cout << "\033[" << table.getSize() + 1 << "A";// moving cursor
 		cout << "\033[" << 10 << "D";
 
 		si++;

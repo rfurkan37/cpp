@@ -6,7 +6,6 @@ using std::cout;
 using std::endl;
 using std::move;
 
-
 Tetromino::Tetromino() // bu da constructor 
 {
 
@@ -30,7 +29,7 @@ Tetromino::Tetromino(Type tip) // bu constructor
 		{
 		blockPrint.push_back(vectorecpe <char> (2));
 		blockPrint[i][0] = 'O';
-		blockPrint[i][1] = 'O';
+		blockPrint[i][1] = 'O';// creating shapes
 		}
 		break;
 	case Type::T :
