@@ -14,33 +14,54 @@ class DayofYearSet
 			public:
 				DayofYear();// default constructor assigns 1 january
 				DayofYear(int m, int d);// constructor assigns month and day
-			private:
+				bool operator == (const DayofYear& element) const;
+				bool operator != (const DayofYear& element) const;
 				int	day;
 				string month;
 			
 		};
-		DayofYearSet();// default constructor
+		DayofYearSet();
+		DayofYearSet(std::initializer_list<DayofYear> element);// default constructor
 		friend	ostream&	operator << (ostream& output, const DayofYearSet& set);
 		bool				operator ==	(const DayofYearSet& set) const;// checks if two sets are equal
 		bool				operator !=	(const DayofYearSet& set) const;// checks if two sets are not equal
 		DayofYearSet		operator +	(const DayofYearSet& set);
-		DayofYearSet		operator +	(const DayofYear& element);// returns the union set as member func
+		DayofYearSet&		operator +	(const DayofYear& element);// returns the union set as member func
 		DayofYearSet		operator -	(const DayofYearSet& set);// returns the difference set
 		DayofYearSet		operator -	(const DayofYear& element);
 		DayofYearSet		operator ^	(const DayofYearSet& set);
 		DayofYearSet		operator !	();
-		DayofYearSet		operator []	(int index);
+		DayofYear&			operator []	(int index){return dataSet[index]; };
 		void				remove(const DayofYear& element); // bu pointıra çevrilebilir.
-		int					size() {return sizeofSet;};
-
+		int					getSize() {return size;};
 		
-	private:
 		DayofYear* dataSet;
-		int sizeofSet = 0;
+		int size = 0;
 		int capacity = 4;
 		void reallocate();
 		void move_set(DayofYear* dest, DayofYear* src, size_t n);
 };
+
+DayofYearSet::DayofYearSet(std::initializer_list<DayofYear> element)
+{
+	dataSet = new DayofYear[capacity];
+	for (auto i : element)
+	{
+		dataSet[size] = i;
+		size++;
+	}
+}
+ostream& operator << (ostream& output, const DayofYearSet& set)
+{
+	DayofYearSet::DayofYear *temp = set.dataSet;
+	for (size_t i = 0; i < set.size; i++)
+	{
+		output << temp->month << " " << temp->day << endl;
+		*temp++;
+	}
+	return output;
+}
+
 
 DayofYearSet::DayofYear::DayofYear()
 {
@@ -113,12 +134,164 @@ DayofYearSet::DayofYear::DayofYear(int m, int d)
 
 }
 
+bool DayofYearSet::DayofYear::operator==(const DayofYear& element) const
+{
+	return ((month == element.month) && (day == element.day));
+}
+
+bool DayofYearSet::DayofYear::operator!=(const DayofYear& element) const
+{
+	return ((month != element.month) || (day != element.day));
+}
+
+bool DayofYearSet::operator==(const DayofYearSet& set) const
+{
+	if(size != set.size)
+		return false;
+	else
+	{
+		DayofYear *temp = dataSet;
+		DayofYear *temp2 = set.dataSet;
+		for (size_t i = 0; i < size; i++)
+		{
+			if(*temp != *temp2)
+				return false;
+			*temp++;
+			*temp2++;
+		}
+		return true;
+	}
+}
+
+DayofYearSet& DayofYearSet::operator+(const DayofYear& element)// add an element to set
+{
+	for (int i = 0; i < size; i++) {
+      if (dataSet[i] == element) {
+        // Element already exists, do nothing and return the set
+        return *this;
+      }
+    }
+
+    // Element does not exist, add it to the set
+    if (size == capacity) {
+      // Set is at capacity, increase capacity by a factor of 2 and reallocate
+      capacity = capacity * 2;
+      reallocate();
+    }
+    dataSet[size++] = element;
+    return *this;
+}
+
+DayofYearSet DayofYearSet::operator-(const DayofYearSet& set)
+{
+    DayofYearSet temp;
+
+    // Allocate memory for temp.dataSet
+    temp.dataSet = new DayofYear[size];
+
+    // Copy elements of dataSet into temp.dataSet that are not in set.dataSet
+    for (size_t i = 0; i < size; i++)
+    {
+        bool found = false;
+        DayofYear *temp2 = set.dataSet;
+        for (size_t j = 0; j < set.size; j++)
+        {
+            if (dataSet[i] == *temp2)
+            {
+                found = true;
+                break;
+            }
+            temp2++;
+        }
+        if (!found)
+        {
+            temp.dataSet[temp.size++] = dataSet[i];
+        }
+    }
+
+    return temp;
+}
+
+DayofYearSet DayofYearSet::operator-(const DayofYear& element)
+{
+	remove(element);
+	return *this;
+}
+
+
+DayofYearSet DayofYearSet::operator+(const DayofYearSet& set)
+{
+    DayofYearSet temp;
+
+    // Allocate memory for temp.dataSet
+    temp.dataSet = new DayofYear[size + set.size];
+
+    // Copy dataSet into temp.dataSet
+    for (size_t i = 0; i < size; i++)
+    {
+        temp.dataSet[temp.size++] = dataSet[i];
+    }
+
+    // Add elements from set.dataSet to temp.dataSet if they are not already present
+    for (size_t i = 0; i < set.size; i++)
+    {
+        bool found = false;
+        for (size_t j = 0; j < temp.size; j++)
+        {
+            if (set.dataSet[i] == temp.dataSet[j])
+            {
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            temp.dataSet[temp.size++] = set.dataSet[i];
+        }
+    }
+
+    return temp;
+}
+
+
+
+DayofYearSet DayofYearSet::operator^(const DayofYearSet& set)
+{
+    DayofYearSet temp;
+
+    // Allocate memory for temp.dataSet
+    temp.dataSet = new DayofYear[size];
+
+    // Copy elements of dataSet into temp.dataSet that are also in set.dataSet
+    for (size_t i = 0; i < size; i++)
+    {
+        bool found = false;
+        DayofYear *temp2 = set.dataSet;
+        for (size_t j = 0; j < set.size; j++)
+        {
+            if (dataSet[i] == *temp2)
+            {
+                found = true;
+                break;
+            }
+            temp2++;
+        }
+        if (found)
+        {
+            temp.dataSet[temp.size++] = dataSet[i];
+        }
+    }
+
+    return temp;
+}
+
+//DayofYearSet DayofYearSet::operator!()// returns the complement set
 
 void DayofYearSet::reallocate()
 {
 	DayofYear* new_set = new DayofYear[capacity];
 	
-	move_set(dataSet, new_set, sizeofSet);
+	move_set(dataSet, new_set, size);
 
 	delete [] dataSet;
 
@@ -160,6 +333,24 @@ void DayofYearSet::move_set(DayofYear* dest, DayofYear* src, size_t n)
   	}
 }
 
+void DayofYearSet::remove(const DayofYear& element)
+{
+	int fo = 0;
+	DayofYear *temp = dataSet;
+	for (size_t i = 0; i < this->size; i++)
+	{
+		if(*temp == element)
+		{
+			move_set(dataSet + i, dataSet + i + 1, size - i);
+			size--;
+			fo++;
+			break;
+		}
+		*temp++;
+	}
+	if(fo == 0)
+		cout << "Not found" << endl;
+}
 
 
 DayofYearSet::DayofYearSet()
@@ -171,7 +362,15 @@ DayofYearSet::DayofYearSet()
 
 int main()
 {
+	DayofYearSet::DayofYear day1(1, 1);
+	DayofYearSet::DayofYear day2(2, 2);
+	DayofYearSet::DayofYear day3(3, 3);
+	DayofYearSet::DayofYear day4(4, 4);
+	DayofYearSet::DayofYear day5(5, 5);
+	DayofYearSet::DayofYear day6(1, 1);
 
+	DayofYearSet set1{day1, day2, day3};
+	DayofYearSet set2{day4, day5, day6};
 
 	return 0;
 }
