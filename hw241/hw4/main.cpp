@@ -33,11 +33,11 @@ int main()
 	cout << "Here is set2:\n" << set2 << endl;
 	outf << "Here is set2:\n" << set2 << endl;
 
-	cout << "Here is size of set1:\n" << set1.getSize() << endl;
-	outf << "Here is size of set1:\n" << set1.getSize() << endl;
+	cout << "Here is size of set1:\n" << set1.size() << endl;
+	outf << "Here is size of set1:\n" << set1.size() << endl;
 
-	cout << "Here is size of set2:\n" << set2.getSize() << endl;
-	outf << "Here is size of set2:\n" << set2.getSize() << endl;
+	cout << "Here is size of set2:\n" << set2.size() << endl;
+	outf << "Here is size of set2:\n" << set2.size() << endl;
 
 	set1 = set1 + d6;
 	cout << "Here when we add d6(d6 is not in set1 and its 6 June) to set1:\n" << set1 << endl;

@@ -119,12 +119,12 @@ void Tetromino::bestFit(vector <Tetromino> tetroVector)
 
 void Tetromino::rotate(char turn)
 {
-	if('R')
+	if(turn == 'R')
 	{
 		this->transpose(); // first transposing the matrix than mirroring
 		this->mirror();
 	}
-	else if('L')
+	else if(turn == 'L')
 	{
 		this->mirror(); // for left its the reverse version
 		this->transpose();
